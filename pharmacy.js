@@ -14,68 +14,79 @@ export class Pharmacy {
         case DrugName.MAGIC_PILL:
           break;
         case DrugName.HERBAL_TEA:
-          this.updateBenefitValueForHerbalTea(drug);
+          this.updateValuesForHerbalTea(drug);
           break;
         case DrugName.FERVEX:
-          this.updateBenefitValueForFervex(drug);
+          this.updateValuesForFervex(drug);
           break;
         case DrugName.DAFALGAN:
-          this.updateBenefitValueForDafalgan(drug);
+          this.updateValuesForDafalgan(drug);
           break;
         default:
-          this.updateBenefitValueForDefaultDrug(drug);
+          this.updateValuesForDefaultDrug(drug);
       }
     }
+
     return this.drugs;
   }
 
-  updateBenefitValueForHerbalTea(herbalTea) {
-    if (herbalTea.benefit < 50) {
-      herbalTea.benefit += 1;
-    }
-    herbalTea.expiresIn -= 1;
-    if (herbalTea.expiresIn < 0 && herbalTea.benefit < 50) {
-      herbalTea.benefit += 1;
-    }
+  updateValuesForHerbalTea(herbalTea) {
+    this.increaseBenefit(herbalTea);
+  
+    this.decreaseExpirationDate(herbalTea);
+
+    if (herbalTea.expiresIn < 0)
+      this.increaseBenefit(herbalTea);
   }
 
-  updateBenefitValueForFervex(fervex) {
-    if (fervex.benefit < 50) {
-      fervex.benefit += 1;
-    }
-    if (fervex.expiresIn < 11 && fervex.benefit < 50) {
-      fervex.benefit += 1;
-    }
-    if (fervex.expiresIn < 6 && fervex.benefit < 50) {
-      fervex.benefit += 1;
-    }
-    fervex.expiresIn -= 1;
-    if (fervex.expiresIn < 0) {
+  updateValuesForFervex(fervex) {
+      this.increaseBenefit(fervex);
+
+    if (fervex.expiresIn < 11)
+      this.increaseBenefit(fervex);
+
+    if (fervex.expiresIn < 6)
+      this.increaseBenefit(fervex);
+    
+    this.decreaseExpirationDate(fervex);
+
+    if (fervex.expiresIn < 0)
       fervex.benefit = 0;
-    }
   }
 
-  updateBenefitValueForDefaultDrug(drug) {
-    if (drug.benefit > 0) {
-      drug.benefit -= 1;
-    }
-    drug.expiresIn -= 1;
-    if (drug.expiresIn < 0 && drug.benefit > 0) {
-      drug.benefit -= 1;
-    }
+  updateValuesForDefaultDrug(drug) {
+    this.decreaseBenefit(drug);
+
+    this.decreaseExpirationDate(drug);
+
+    if (drug.expiresIn < 0)
+      this.decreaseBenefit(drug);
   }
 
-  updateBenefitValueForDafalgan(dafalgan) {
-    if (dafalgan.benefit > 0) {
+  updateValuesForDafalgan(dafalgan) {
+    if (dafalgan.benefit > 0)
       dafalgan.benefit -= 2;
-    }
-    dafalgan.expiresIn -= 1;
-    if (dafalgan.expiresIn < 0 && dafalgan.benefit > 0) {
-      dafalgan.benefit -= 2;
-    }
 
-    if (dafalgan.benefit < 0) {
+    this.decreaseExpirationDate(dafalgan);
+
+    if (dafalgan.expiresIn < 0 && dafalgan.benefit > 0)
+      dafalgan.benefit -= 2;
+
+    if (dafalgan.benefit < 0)
       dafalgan.benefit = 0;
-    }
+  }
+
+  increaseBenefit(drug) {
+    if (drug.benefit < 50)
+      drug.benefit += 1;
+  }
+
+  decreaseBenefit(drug) {
+    if (drug.benefit > 0)
+      drug.benefit -= 1;
+  }
+
+  decreaseExpirationDate(drug) {
+    drug.expiresIn -= 1;
   }
 }
