@@ -1,12 +1,13 @@
 import { Drug, Pharmacy } from "./pharmacy.js";
+import { DrugName } from "./drug.js";
 
 import fs from "fs";
 
 const drugs = [
-  new Drug("Doliprane", 20, 30),
-  new Drug("Herbal Tea", 10, 5),
-  new Drug("Fervex", 12, 35),
-  new Drug("Magic Pill", 15, 40),
+  new Drug(DrugName.DOLIPRANE, 20, 30),
+  new Drug(DrugName.HERBAL_TEA, 10, 5),
+  new Drug(DrugName.FERVEX, 12, 35),
+  new Drug(DrugName.MAGIC_PILL, 15, 40),
 ];
 const pharmacy = new Pharmacy(drugs);
 
