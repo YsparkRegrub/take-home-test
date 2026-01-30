@@ -19,6 +19,9 @@ export class Pharmacy {
         case DrugName.FERVEX:
           this.updateBenefitValueForFervex(drug);
           break;
+        case DrugName.DAFALGAN:
+          this.updateBenefitValueForDafalgan(drug);
+          break;
         default:
           this.updateBenefitValueForDefaultDrug(drug);
       }
@@ -59,6 +62,20 @@ export class Pharmacy {
     drug.expiresIn -= 1;
     if (drug.expiresIn < 0 && drug.benefit > 0) {
       drug.benefit -= 1;
+    }
+  }
+
+  updateBenefitValueForDafalgan(dafalgan) {
+    if (dafalgan.benefit > 0) {
+      dafalgan.benefit -= 2;
+    }
+    dafalgan.expiresIn -= 1;
+    if (dafalgan.expiresIn < 0 && dafalgan.benefit > 0) {
+      dafalgan.benefit -= 2;
+    }
+
+    if (dafalgan.benefit < 0) {
+      dafalgan.benefit = 0;
     }
   }
 }

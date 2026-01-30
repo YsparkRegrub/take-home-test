@@ -80,7 +80,25 @@ describe("Pharmacy", () => {
         );
       })
     })
-  })
 
-  it.todo("degrades benefit twice as fast for Dafalgan");
+    describe("Dafalgan", () => {
+      it("should decrease benefit by 2 before expiration", () => {
+        expect(updateOnce(new Drug(DrugName.DAFALGAN, 5, 10))).toEqual(
+          new Drug(DrugName.DAFALGAN, 4, 8),
+        );
+      })
+
+      it("should decrease benefit by 4 after expiration", () => {
+        expect(updateOnce(new Drug(DrugName.DAFALGAN, 0, 10))).toEqual(
+          new Drug(DrugName.DAFALGAN, -1, 6),
+        );
+      })
+
+      it("should not decrease benefit below 0", () => {
+        expect(updateOnce(new Drug(DrugName.DAFALGAN, 5, 1))).toEqual(
+          new Drug(DrugName.DAFALGAN, 4, 0),
+        );
+      })
+    })
+  })
 });
