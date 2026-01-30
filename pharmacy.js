@@ -5,57 +5,60 @@ export class Pharmacy {
   constructor(drugs = []) {
     this.drugs = drugs;
   }
+
   updateBenefitValue() {
     for (var i = 0; i < this.drugs.length; i++) {
-      if (
-        this.drugs[i].name != DrugName.HERBAL_TEA &&
-        this.drugs[i].name != DrugName.FERVEX
-      ) {
-        if (this.drugs[i].benefit > 0) {
-          if (this.drugs[i].name != DrugName.MAGIC_PILL) {
-            this.drugs[i].benefit = this.drugs[i].benefit - 1;
-          }
-        }
-      } else {
-        if (this.drugs[i].benefit < 50) {
-          this.drugs[i].benefit = this.drugs[i].benefit + 1;
-          if (this.drugs[i].name == DrugName.FERVEX) {
-            if (this.drugs[i].expiresIn < 11) {
-              if (this.drugs[i].benefit < 50) {
-                this.drugs[i].benefit = this.drugs[i].benefit + 1;
-              }
-            }
-            if (this.drugs[i].expiresIn < 6) {
-              if (this.drugs[i].benefit < 50) {
-                this.drugs[i].benefit = this.drugs[i].benefit + 1;
-              }
-            }
-          }
-        }
-      }
-      if (this.drugs[i].name != DrugName.MAGIC_PILL) {
-        this.drugs[i].expiresIn = this.drugs[i].expiresIn - 1;
-      }
-      if (this.drugs[i].expiresIn < 0) {
-        if (this.drugs[i].name != DrugName.HERBAL_TEA) {
-          if (this.drugs[i].name != DrugName.FERVEX) {
-            if (this.drugs[i].benefit > 0) {
-              if (this.drugs[i].name != DrugName.MAGIC_PILL) {
-                this.drugs[i].benefit = this.drugs[i].benefit - 1;
-              }
-            }
-          } else {
-            this.drugs[i].benefit =
-              this.drugs[i].benefit - this.drugs[i].benefit;
-          }
-        } else {
-          if (this.drugs[i].benefit < 50) {
-            this.drugs[i].benefit = this.drugs[i].benefit + 1;
-          }
-        }
+      const drug = this.drugs[i];
+
+      switch (drug.name) {
+        case DrugName.MAGIC_PILL:
+          break;
+        case DrugName.HERBAL_TEA:
+          this.updateBenefitValueForHerbalTea(drug);
+          break;
+        case DrugName.FERVEX:
+          this.updateBenefitValueForFervex(drug);
+          break;
+        default:
+          this.updateBenefitValueForDefaultDrug(drug);
       }
     }
-
     return this.drugs;
+  }
+
+  updateBenefitValueForHerbalTea(herbalTea) {
+    if (herbalTea.benefit < 50) {
+      herbalTea.benefit += 1;
+    }
+    herbalTea.expiresIn -= 1;
+    if (herbalTea.expiresIn < 0 && herbalTea.benefit < 50) {
+      herbalTea.benefit += 1;
+    }
+  }
+
+  updateBenefitValueForFervex(fervex) {
+    if (fervex.benefit < 50) {
+      fervex.benefit += 1;
+    }
+    if (fervex.expiresIn < 11 && fervex.benefit < 50) {
+      fervex.benefit += 1;
+    }
+    if (fervex.expiresIn < 6 && fervex.benefit < 50) {
+      fervex.benefit += 1;
+    }
+    fervex.expiresIn -= 1;
+    if (fervex.expiresIn < 0) {
+      fervex.benefit = 0;
+    }
+  }
+
+  updateBenefitValueForDefaultDrug(drug) {
+    if (drug.benefit > 0) {
+      drug.benefit -= 1;
+    }
+    drug.expiresIn -= 1;
+    if (drug.expiresIn < 0 && drug.benefit > 0) {
+      drug.benefit -= 1;
+    }
   }
 }
