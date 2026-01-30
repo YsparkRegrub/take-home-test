@@ -4,7 +4,6 @@ export const DrugName = Object.freeze({
   FERVEX: "Fervex",
   MAGIC_PILL: "Magic Pill",
   DAFALGAN: "Dafalgan",
-  TEST: "test",
 });
 
 export class Drug {
