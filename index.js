@@ -8,6 +8,7 @@ const drugs = [
   new Drug(DrugName.HERBAL_TEA, 10, 5),
   new Drug(DrugName.FERVEX, 12, 35),
   new Drug(DrugName.MAGIC_PILL, 15, 40),
+  new Drug(DrugName.DAFALGAN, 10, 40),
 ];
 const pharmacy = new Pharmacy(drugs);
 
